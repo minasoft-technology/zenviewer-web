@@ -15,22 +15,10 @@ window.config = {
           },
         },
         React.createElement('img', {
-          src: './zen-logo.svg',
+          src: '/zen-icon.png',
           alt: 'ZenViewer',
-          style: { height: '28px' },
-        }),
-        React.createElement(
-          'span',
-          {
-            style: {
-              color: '#fff',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              letterSpacing: '0.5px',
-            },
-          },
-          'ZenViewer'
-        )
+          style: { height: '24px' },
+        })
       );
     },
   },
