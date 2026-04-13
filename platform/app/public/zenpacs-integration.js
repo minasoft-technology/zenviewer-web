@@ -172,7 +172,7 @@
       // Create ZenPACS toolbar container — positioned absolutely to avoid overlap with OHIF's right-side buttons
       var container = document.createElement('div');
       container.id = 'zenpacs-toolbar';
-      container.style.cssText = 'position:absolute;right:120px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:4px;z-index:10;';
+      container.style.cssText = 'position:absolute;right:240px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:4px;z-index:10;';
 
       // Okundu button (green)
       container.appendChild(createToolbarButton('Okundu', '#16a34a', function (caseId, btn) {
@@ -453,6 +453,8 @@
   if (_token && _patientCaseIds.length > 0) {
     injectToolbar();
     initShortcuts();
+    // Auto-open Anamnez panel after viewer renders
+    setTimeout(function () { toggleAnamnezPanel(); }, 3000);
     console.log('[ZenPACS] Integration active for cases:', _patientCaseIds);
   } else {
     console.log('[ZenPACS] No auth token or case IDs — integration inactive (demo mode)');
