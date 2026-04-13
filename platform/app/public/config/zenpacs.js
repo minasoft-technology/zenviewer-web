@@ -3,11 +3,44 @@
 window.config = {
   name: 'config/zenpacs.js',
   routerBasename: null,
-  // whiteLabeling: {},
+  whiteLabeling: {
+    createLogoComponentFn: function (React) {
+      return React.createElement(
+        'div',
+        {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+          },
+        },
+        React.createElement('img', {
+          src: './zen-logo.svg',
+          alt: 'ZenViewer',
+          style: { height: '28px' },
+        }),
+        React.createElement(
+          'span',
+          {
+            style: {
+              color: '#fff',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              letterSpacing: '0.5px',
+            },
+          },
+          'ZenViewer'
+        )
+      );
+    },
+  },
+  investigationalUseDialog: {
+    option: 'never',
+  },
   extensions: [],
   modes: [],
   customizationService: {},
-  showStudyList: true,
+  showStudyList: false,
   // some windows systems have issues with more than 3 web workers
   maxNumberOfWebWorkers: 3,
   // below flag is for performance reasons, but it might not work for all servers
