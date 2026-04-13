@@ -201,7 +201,9 @@
     <!-- ZenPACS customizations -->
     <style>
       [data-cy="Capture-btn"] { display: none !important; }
+      #zenpacs-toolbar button:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
+    <script defer src="<%= PUBLIC_URL %>zenpacs-integration.js"></script>
 
     <script>
       function browserImportFunction(moduleId) {
