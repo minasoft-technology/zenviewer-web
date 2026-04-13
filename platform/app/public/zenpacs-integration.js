@@ -169,10 +169,10 @@
       clearInterval(interval);
       if (!header) { console.warn('[ZenPACS] Header not found after 30s'); return; }
 
-      // Create ZenPACS toolbar container
+      // Create ZenPACS toolbar container — positioned absolutely to avoid overlap with OHIF's right-side buttons
       var container = document.createElement('div');
       container.id = 'zenpacs-toolbar';
-      container.style.cssText = 'display:flex;align-items:center;gap:4px;margin-left:auto;margin-right:8px;';
+      container.style.cssText = 'position:absolute;right:120px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:4px;z-index:10;';
 
       // Okundu button (green)
       container.appendChild(createToolbarButton('Okundu', '#16a34a', function (caseId, btn) {
@@ -234,7 +234,6 @@
       container.appendChild(anamnezBtn);
 
       // Insert into header bar
-      header.style.display = 'flex';
       header.appendChild(container);
 
       console.log('[ZenPACS] Toolbar injected');
