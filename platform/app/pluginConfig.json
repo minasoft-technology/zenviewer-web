@@ -65,9 +65,16 @@
     {
       "packageName": "@ohif/extension-ultrasound-pleura-bline",
       "version": "3.0.0"
+    },
+    {
+      "packageName": "@zenpacs/extension-zenpacs",
+      "version": "1.0.0"
     }
   ],
   "modes": [
+    {
+      "packageName": "@zenpacs/mode-radiology"
+    },
     {
       "packageName": "@ohif/mode-longitudinal"
     },

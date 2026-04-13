@@ -1,0 +1,33 @@
+{
+  "name": "@zenpacs/mode-radiology",
+  "version": "1.0.0",
+  "description": "ZenPACS radiology mode — longitudinal tracking with ZenPACS status buttons, voice recording, and anamnesis panel",
+  "author": "Minasoft Technology",
+  "license": "PROPRIETARY",
+  "main": "dist/zenpacs-mode-radiology.umd.js",
+  "module": "src/index.ts",
+  "engines": {
+    "node": ">=18",
+    "yarn": ">=1.18.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "ohif-mode"
+  ],
+  "scripts": {
+    "clean": "shx rm -rf dist",
+    "dev": "cross-env NODE_ENV=development webpack --config .webpack/webpack.dev.js --watch",
+    "build": "cross-env NODE_ENV=production webpack --config .webpack/webpack.prod.js",
+    "start": "yarn run dev"
+  },
+  "peerDependencies": {
+    "@ohif/core": "3.13.0-beta.57",
+    "@ohif/extension-default": "3.13.0-beta.57",
+    "@ohif/extension-cornerstone": "3.13.0-beta.57",
+    "@ohif/extension-measurement-tracking": "3.13.0-beta.57",
+    "@zenpacs/extension-zenpacs": "1.0.0"
+  }
+}
