@@ -2,7 +2,7 @@
 # Build: docker build -f Dockerfile.zenpacs -t zenviewer-web .
 # Run:   docker run -d -p 3000:80 zenviewer-web
 
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy everything and install + build
