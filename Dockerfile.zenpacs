@@ -5,46 +5,51 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Install dependencies
-COPY package.json yarn.lock ./
-COPY platform/app/package.json ./platform/app/
-COPY platform/core/package.json ./platform/core/
-COPY platform/ui/package.json ./platform/ui/
-COPY platform/ui-next/package.json ./platform/ui-next/
-COPY platform/i18n/package.json ./platform/i18n/
-COPY platform/cli/package.json ./platform/cli/
-
-# Copy all extension and mode package.jsons
-COPY extensions/*/package.json ./extensions/
-COPY modes/*/package.json ./modes/
-
-# Full copy for build
+# Copy everything and install + build
 COPY . .
-
 RUN yarn install --frozen-lockfile --network-timeout 300000
 
 # Build with ZenPACS config
 ENV APP_CONFIG=config/zenpacs.js
 RUN yarn build
 
-# Production image
+# Production image — tiny nginx
 FROM nginx:alpine
-COPY --from=builder /app/platform/app/dist /usr/share/nginx/html
-COPY platform/app/public/config/zenpacs.js /usr/share/nginx/html/app-config.js
-COPY platform/app/public/zen-logo.svg /usr/share/nginx/html/zen-logo.svg
 
-# Nginx config for SPA routing
-RUN echo 'server { \
-  listen 80; \
-  root /usr/share/nginx/html; \
-  index index.html; \
-  location / { \
-    try_files $uri $uri/ /index.html; \
-  } \
-  location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf)$ { \
-    expires 1y; \
-    add_header Cache-Control "public, immutable"; \
-  } \
-}' > /etc/nginx/conf.d/default.conf
+# Copy built app
+COPY --from=builder /app/platform/app/dist /usr/share/nginx/html
+
+# Override app-config.js with our ZenPACS config (runtime config)
+COPY --from=builder /app/platform/app/public/config/zenpacs.js /usr/share/nginx/html/app-config.js
+
+# Copy ZenPACS assets
+COPY --from=builder /app/platform/app/public/zen-icon.png /usr/share/nginx/html/zen-icon.png
+COPY --from=builder /app/platform/app/public/zen-logo.svg /usr/share/nginx/html/zen-logo.svg
+COPY --from=builder /app/platform/app/public/zenpacs-integration.js /usr/share/nginx/html/zenpacs-integration.js
+
+# Nginx config: SPA routing + CORS for API/MinIO
+RUN cat > /etc/nginx/conf.d/default.conf << 'NGINX'
+server {
+    listen 80;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # SPA fallback
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Cache static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Gzip
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml;
+    gzip_min_length 1000;
+}
+NGINX
 
 EXPOSE 80
